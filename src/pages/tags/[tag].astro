@@ -1,17 +1,16 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
-  const allPosts = Object.values(
-    import.meta.glob("../posts/*.md", { eager: true })
-  );
+  const allPosts = await getCollection("blog");
   const uniqueTags = [
-    ...new Set(allPosts.map((post: any) => post.frontmatter.tags).flat()),
+    ...new Set(allPosts.map((post: any) => post.data.tags).flat()),
   ];
 
   return uniqueTags.map((tag) => {
     const filteredPosts = allPosts.filter((post: any) =>
-      post.frontmatter.tags.includes(tag)
+      post.data.tags.includes(tag)
     );
     return {
       params: { tag },
@@ -22,10 +21,6 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params;
 const { posts } = Astro.props;
-// 위에서 리팩토링됨
-// const filteredPosts = posts.filter((post: any) =>
-//   post.frontmatter.tags?.includes(tag)
-// );
 ---
 
 <BaseLayout pageTitle={tag}>
@@ -34,7 +29,7 @@ const { posts } = Astro.props;
     {
       posts.map((post: any) => (
         <li>
-          <a href={post.url}>{post.frontmatter.title}</a>
+          <a href={`/posts/${post.id}`}>{post.data.title}</a>
         </li>
       ))
     }
