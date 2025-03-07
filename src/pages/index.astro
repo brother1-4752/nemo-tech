@@ -1,5 +1,7 @@
 ---
+import Footer from "../components/Footer.astro";
 import "../styles/global.css";
+import Header from "../components/Header.astro";
 const pageTitle = "홈페이지";
 ---
 
@@ -13,8 +15,11 @@ const pageTitle = "홈페이지";
   </head>
   <body>
     <h1>Astro</h1>
-    <a href="/">Home</a>
-    <a href="/about/">About</a>
-    <a href="/blog/">Blog</a>
+    <Header />
+
+    <Footer />
+    <script>
+      import "../scripts/menu.js";
+    </script>
   </body>
 </html>
